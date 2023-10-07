@@ -1,4 +1,4 @@
-from sqlmodel import Session
+from sqlmodel import Session, select
 from src.config.db import engine
 from ..models import User
 from flask_jwt_extended import create_access_token
@@ -20,6 +20,14 @@ def create_user(data: dict):
         return True
     except:
         return False
+
+def get_user_by_email(email:str):
+    with Session(engine) as session:
+        results = session.exec(select(User).where(User.email == email)).one_or_none()
+        
+        return results
+
+
 
 
 def create_token(email:str, days:int = 7):

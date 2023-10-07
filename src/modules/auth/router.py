@@ -2,11 +2,12 @@ from apiflask import APIBlueprint
 from src.config.db import engine
 
 from .schemas.register import RegisterIn
+from .schemas.login import LoginIn
 
 from sqlmodel import Session, select
 from .models import User
 from .utils.user import create_user, create_token
-
+from .utils.user import get_user_by_email
 
 bp = APIBlueprint("auth", __name__)
 
@@ -14,14 +15,8 @@ bp = APIBlueprint("auth", __name__)
 @bp.input(RegisterIn)
 def register(json_data):
     email = json_data["email"]    
-    user_by_email = None
+    user_by_email = get_user_by_email(email)
     
-    with Session(engine) as session:
-        results = session.exec(select(User).where(User.email == email)).one_or_none()
-        
-        user_by_email = results
-        
-        print(user_by_email)
     
     if user_by_email is not None:
         return {
@@ -38,5 +33,21 @@ def register(json_data):
         
 
     return{
-        "access_token": create_token()
+        "access_token": create_token(email=email)
     }
+    
+@bp.post("/login")
+@bp.input(LoginIn)
+def login(json_data):
+    email = json_data["email"]
+    user_by_email = get_user_by_email(email)
+    
+    if user_by_email == None:
+        return{
+            "error": "Email or password Wrong"
+        }, 400
+    
+    return{
+        "access_token": create_token(email=email)
+    }
+    
