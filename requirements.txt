@@ -15,6 +15,8 @@ marshmallow==3.20.1
 packaging==23.2
 pydantic==1.10.13
 PyJWT==2.8.0
+python-decouple==3.8
+python-dotenv==1.0.0
 SQLAlchemy==1.4.41
 sqlalchemy2-stubs==0.0.2a35
 sqlmodel==0.0.8
