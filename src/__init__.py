@@ -8,6 +8,15 @@ from src.modules.restaurant.router import bp as restaurant_bp
 
 app = APIFlask(__name__)
 
+app.security_schemes = {
+    'JWTAuth': {
+        'type': 'http',
+        'scheme': 'bearer',
+        'bearerFormat': 'JWT',
+    }
+}
+
+
 app.config["SECRET_KEY"] = env("SECRET_KEY")
 app.config["JWT_SECRET_KEY"] = env("JWT_SECRET_KEY")
 

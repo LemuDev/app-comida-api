@@ -5,6 +5,11 @@ from sqlmodel import Session, select
 from src.config.db import engine
 from src.utils.paginator import Paginator
 from src.schemas.paginator import PaginatorQuery
+
+from src.modules.auth.utils.user import get_user_by_email
+
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 bp = APIBlueprint("restaurant", __name__, url_prefix= "/api")
 
 @bp.get("/restaurant")
@@ -32,3 +37,18 @@ def restaurant_list(query_data):
     
     
     return response
+
+
+@bp.post("/restaurant")
+@jwt_required()
+@bp.doc(security='JWTAuth')
+def create_restaurant():
+    email = get_jwt_identity()
+    current_user = get_user_by_email(email)
+
+    if not current_user.is_admin:
+        return {
+            "msg": "Not valid token you must be Admin"
+        }, 401
+    
+    return {}
