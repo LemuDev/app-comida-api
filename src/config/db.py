@@ -2,7 +2,7 @@ from sqlmodel import Field, SQLModel, create_engine
 
 # Models
 from src.modules.auth.models import User
-
+from src.modules.restaurant.models import Restaurant
 
 sqlite_file_name = "database.db"
 sqlite_url = f"sqlite:///{sqlite_file_name}"

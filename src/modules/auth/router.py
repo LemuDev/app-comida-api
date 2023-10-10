@@ -9,7 +9,7 @@ from .models import User
 from .utils.user import create_user, create_token
 from .utils.user import get_user_by_email
 
-bp = APIBlueprint("auth", __name__)
+bp = APIBlueprint("auth", __name__, url_prefix="/api")
 
 @bp.post("/register")
 @bp.input(RegisterIn)
