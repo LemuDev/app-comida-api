@@ -1,14 +1,15 @@
 from apiflask import APIBlueprint
 from .schemas.restaurant import RestaurantsOut
 from .models import Restaurant
-from sqlmodel import Session, select
-from src.config.db import engine
+
 from src.utils.paginator import Paginator
 from src.schemas.paginator import PaginatorQuery
 
 from src.modules.auth.utils.user import get_user_by_email
 
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
+from .schemas.restaurant import RestaurantIn
 
 bp = APIBlueprint("restaurant", __name__, url_prefix= "/api")
 
@@ -42,9 +43,11 @@ def restaurant_list(query_data):
 @bp.post("/restaurant")
 @jwt_required()
 @bp.doc(security='JWTAuth')
-def create_restaurant():
+@bp.input(RestaurantIn)
+def create_restaurant(json_data):
     email = get_jwt_identity()
     current_user = get_user_by_email(email)
+
 
     if not current_user.is_admin:
         return {

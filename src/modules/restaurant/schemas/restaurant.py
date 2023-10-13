@@ -1,5 +1,6 @@
 from apiflask import Schema, fields
 from apiflask.fields import Nested
+from apiflask.validators import Length
 
 
 class RestaurantOut(Schema):
@@ -14,3 +15,7 @@ class RestaurantsOut(Schema):
     prev_page = fields.String()
     
 
+class RestaurantIn(Schema):
+    name = fields.String(validate=[Length(max=60)], required=True)
+    description = fields.String(validate=[Length(max=255)], required=True)
+    image = fields.File(required=True)
