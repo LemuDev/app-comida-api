@@ -2,6 +2,7 @@ from apiflask import APIFlask
 from decouple import config as env
 
 from src.config.jwt import jwt
+from src.config.cors import cors
 
 from src.modules.auth.router import bp as auth_bp
 from src.modules.restaurant.router import bp as restaurant_bp
@@ -25,3 +26,4 @@ app.register_blueprint(restaurant_bp)
 
 
 jwt.init_app(app)
+cors.init_app(app)

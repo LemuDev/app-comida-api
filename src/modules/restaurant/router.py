@@ -44,14 +44,17 @@ def restaurant_list(query_data):
 @jwt_required()
 @bp.doc(security='JWTAuth')
 @bp.input(RestaurantIn)
-def create_restaurant(json_data):
+def create_restaurant(json_data, files):
     email = get_jwt_identity()
     current_user = get_user_by_email(email)
 
+    print(files)
 
     if not current_user.is_admin:
         return {
             "msg": "Not valid token you must be Admin"
         }, 401
+    
+    
     
     return {}

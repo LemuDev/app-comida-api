@@ -16,6 +16,6 @@ class RestaurantsOut(Schema):
     
 
 class RestaurantIn(Schema):
-    name = fields.String(validate=[Length(max=60)], required=True)
-    description = fields.String(validate=[Length(max=255)], required=True)
+    name = fields.String(validate=[Length(max=60), Length(min=1)], required=True)
+    description = fields.String(validate=[Length(max=255), Length(min=1)], required=True)
     image = fields.File(required=True)
