@@ -43,18 +43,32 @@ def restaurant_list(query_data):
 @bp.post("/restaurant")
 @jwt_required()
 @bp.doc(security='JWTAuth')
-@bp.input(RestaurantIn)
-def create_restaurant(json_data, files):
+@bp.input(RestaurantIn, location='form_and_files')
+def create_restaurant(form_and_files_data):
     email = get_jwt_identity()
     current_user = get_user_by_email(email)
 
-    print(files)
-
+    print(dir(form_and_files_data['image']))
+    print(form_and_files_data['image'].mimetype)
+    
+    image_file = form_and_files_data['image'].mimetype
+    
     if not current_user.is_admin:
         return {
             "msg": "Not valid token you must be Admin"
         }, 401
     
+  
+    
+    if image_file != 'image/jpg' and image_file != 'image/jpeg' and image_file != 'image/webp' and image_file != 'image/png':
+        return {
+            'errors':{
+                'image':'Invalid img file. must be .JPG, .JPEG, .PNG or .WEBP'
+            }
+        }      
+
+    
+
     
     
     return {}
