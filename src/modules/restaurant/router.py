@@ -11,6 +11,9 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from .schemas.restaurant import RestaurantIn
 
+from .utils.restaurant import create_restaurant_db, restaurant_by_name
+import secrets
+
 bp = APIBlueprint("restaurant", __name__, url_prefix= "/api")
 
 @bp.get("/restaurant")
@@ -48,8 +51,6 @@ def create_restaurant(form_and_files_data):
     email = get_jwt_identity()
     current_user = get_user_by_email(email)
 
-    print(dir(form_and_files_data['image']))
-    print(form_and_files_data['image'].mimetype)
     
     image_file = form_and_files_data['image'].mimetype
     
@@ -67,8 +68,28 @@ def create_restaurant(form_and_files_data):
             }
         }      
 
+        
+    name = form_and_files_data['name']
+    description = form_and_files_data['description']
+    user_id = current_user.id
+    image = form_and_files_data['image']
     
 
+    create = create_restaurant_db(
+        data={
+            'name':name,
+            'description':description,
+        },
+        user_id = user_id,
+        image = image
+    )
     
+    if not create:
+        return {
+            'error': 'Error creating your Restaurant try again'
+        }, 400
+        
     
-    return {}
+    return {
+        'message': 'created successfully'
+    }
