@@ -1,13 +1,12 @@
 from apiflask import APIBlueprint
-from src.config.db import engine
 
 from .schemas.register import RegisterIn
 from .schemas.login import LoginIn
 
-from sqlmodel import Session, select
-from .models import User
 from .utils.user import create_user, create_token
 from .utils.user import get_user_by_email
+
+from werkzeug.security import check_password_hash
 
 bp = APIBlueprint("auth", __name__, url_prefix="/api")
 
@@ -40,6 +39,7 @@ def register(json_data):
 @bp.input(LoginIn)
 def login(json_data):
     email = json_data["email"]
+    password = json_data["password"]
     user_by_email = get_user_by_email(email)
     
     if user_by_email == None:
@@ -47,7 +47,13 @@ def login(json_data):
             "error": "Email or password Wrong"
         }, 400
     
+    if not check_password_hash(user_by_email.password, password):
+        return{
+            "error": "Email or password Wrong"
+        }, 400
+    
+
+        
     return{
         "access_token": create_token(email=email)
     }
-    

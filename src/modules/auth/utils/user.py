@@ -3,15 +3,17 @@ from src.config.db import engine
 from ..models import User
 from flask_jwt_extended import create_access_token
 import datetime
+from werkzeug.security import generate_password_hash
 
 def create_user(data: dict):
     try:
+        pwd_hash = generate_password_hash(data["password"])
         with Session(engine) as session:
             new_user = User(
                 first_name = data["first_name"],
                 last_name = data["last_name"],
                 email = data["email"],
-                password = data["password"]
+                password = pwd_hash
             )        
 
             session.add(new_user)
