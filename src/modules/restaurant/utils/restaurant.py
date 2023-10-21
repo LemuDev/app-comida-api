@@ -14,7 +14,7 @@ def create_restaurant_db(data:dict, user_id:int, image):
     image_filename = secrets.token_hex(16) + file_extension 
     image.save(os.path.join('files/images', secure_filename(image_filename)))
     
-    image_url = f'{config("BACKEND_URL")}/files/{image_filename}'
+    image_url = f'{config("BACKEND_URL")}/images/{image_filename}'
     
     try:
         with Session(engine) as session:
@@ -22,7 +22,7 @@ def create_restaurant_db(data:dict, user_id:int, image):
                 name = data['name'],
                 description = data['description'],
                 user_id=user_id,
-                image_url= image_url
+                image= image_url
             )
             
             session.add(restaurant)

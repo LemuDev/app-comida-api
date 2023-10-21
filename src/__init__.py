@@ -6,6 +6,7 @@ from src.config.cors import cors
 
 from src.modules.auth.router import bp as auth_bp
 from src.modules.restaurant.router import bp as restaurant_bp
+from src.modules.files.router import bp as files_bp
 
 app = APIFlask(__name__)
 
@@ -23,6 +24,7 @@ app.config["JWT_SECRET_KEY"] = env("JWT_SECRET_KEY")
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(restaurant_bp)
+app.register_blueprint(files_bp)
 
 
 jwt.init_app(app)

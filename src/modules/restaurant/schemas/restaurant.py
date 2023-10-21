@@ -6,7 +6,8 @@ from apiflask.validators import Length
 class RestaurantOut(Schema):
     id = fields.Integer()
     name = fields.String()
-    description: fields.String()
+    description  =  fields.String()
+    image = fields.String()
     user_id: fields.Integer()
 
 class RestaurantsOut(Schema):
