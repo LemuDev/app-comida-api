@@ -7,13 +7,14 @@ from werkzeug.security import generate_password_hash
 
 def create_user(data: dict):
     try:
-        pwd_hash = generate_password_hash(data["password"])
+        
+        print(data['password'], generate_password_hash(password=data["password"]), len(generate_password_hash(password=data["password"])))
         with Session(engine) as session:
             new_user = User(
                 first_name = data["first_name"],
                 last_name = data["last_name"],
                 email = data["email"],
-                password = pwd_hash
+                password = generate_password_hash(password=data["password"])
             )        
 
             session.add(new_user)

@@ -6,6 +6,6 @@ class User(SQLModel, table=True):
     first_name: str = Field(max_length=60)
     last_name: str = Field(max_length=60)
     email: str = Field(max_length=100)
-    password: str = Field(max_length=100)
+    password: str = Field(max_length=255)
     
     is_admin: bool = Field(default=False)
